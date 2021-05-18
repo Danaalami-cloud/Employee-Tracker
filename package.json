@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/Danaalami-cloud/Employee-Tracker/issues"
   },
-  "homepage": "https://github.com/Danaalami-cloud/Employee-Tracker#readme"
+  "homepage": "https://github.com/Danaalami-cloud/Employee-Tracker#readme",
+  "dependencies": {
+    "mysql": "^2.18.1"
+  }
 }
