@@ -47,4 +47,45 @@ switch (answer.action){
 
 function manageAll() {
     const query = 'SELECT * FROM'
+    inquirer.prompt({
+        type:"input";
+        name: "All";
+        message: "what do you want to manage?";
+        choices: "role","departments", "employees";
+    })
+}
+
+function viewDepartments(){
+    inquirer.prompt({
+        type:"input",
+        name: "departments",
+        message: "what department do you want to view?",
+}
+function viewRoles(){
+    inquirer.prompt({
+        type:"input",
+        name: "roles",
+        message: "what role do you want to see?",
+}
+
+function viewEmployeess() {
+    inquirer.prompt({
+        type:"input",
+        name: "employees",
+        message: "what employees do you want to see?",
+}
+
+function deleteAll () {
+    inquirer.prompt({
+        type:"input";
+        name: "delete";
+        message: "whoud you like to delete all of your campnay's data?";
+}
+
+function updateEmployees() {
+
+}
+
+function exitApp() {
+
 }
