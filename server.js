@@ -26,7 +26,7 @@ function initialiseQuestions() {
           "view departments",
           "view roles",
           "view employees",
-          "Add employee",
+          "add employee",
           "add department",
           "add role",
           "update role of emplyees",
@@ -35,19 +35,40 @@ function initialiseQuestions() {
       },
     ])
     .then((action) => {
-      switch (action.action){
+      switch (action.action) {
+        case "view departments":
+          return viewDepartments();
+        case "view employees":
+          return viewEmployees();
+        case "view roles":
+          return viewRoles();
+          
+      }
+    });
+}
 
-          case "view departments":
-              return viewDepartments();
-            }
-            });
-        }
+function viewDepartments() {
+  connection.query("SELECT * FROM department", (err, res) => {
+    if (err) throw err;
+    console.log(res);
+    initialiseQuestions();
+  });
+}
 
-function viewDepartments(){
-   connection.query("SELECT * FROM department", (err, res) => {
-       if(err) throw err;
-       console.log(res)
-   })
+function viewRoles() {
+  connection.query("SELECT * FROM role", (err, res) => {
+    if (err) throw err;
+    console.log(res);
+    initialiseQuestions();
+  });
+}
+
+function viewEmployees() {
+  connection.query("SELECT * FROM employee", (err, res) => {
+    if (err) throw err;
+    console.log(res);
+    initialiseQuestions();
+  });
 }
 /*
 function manageAll() {
