@@ -42,7 +42,8 @@ function initialiseQuestions() {
           return viewEmployees();
         case "view roles":
           return viewRoles();
-          
+        case "exit app":
+          return exitApp();
       }
     });
 }
@@ -69,6 +70,10 @@ function viewEmployees() {
     console.log(res);
     initialiseQuestions();
   });
+}
+
+function exitApp() {
+  connection.end();
 }
 /*
 function manageAll() {
