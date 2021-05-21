@@ -35,10 +35,20 @@ function initialiseQuestions() {
       },
     ])
     .then((action) => {
-      console.log(action);
-    });
-}
+      switch (action.action){
 
+          case "view departments":
+              return viewDepartments();
+            }
+            });
+        }
+
+function viewDepartments(){
+   connection.query("SELECT * FROM department", (err, res) => {
+       if(err) throw err;
+       console.log(res)
+   })
+}
 /*
 function manageAll() {
     const query = 'SELECT * FROM'
@@ -50,12 +60,6 @@ function manageAll() {
     })
 }
 
-function viewDepartments(){
-    inquirer.prompt({
-        type:"input",
-        name: "departments",
-        message: "what department do you want to view?",
-}
 function viewRoles(){
     inquirer.prompt({
         type:"input",
