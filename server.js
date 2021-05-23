@@ -44,6 +44,14 @@ function initialiseQuestions() {
           return viewRoles();
         case "exit app":
           return exitApp();
+          case "add department":
+          return addDepartment();
+          case "add role":
+          return addRole();
+          case "add employee":
+          return addEmployee();
+          case "update employee role":
+          return updateEmployee();
       }
     });
 }
@@ -74,6 +82,55 @@ function viewEmployees() {
 
 function exitApp() {
   connection.end();
+}
+
+function addDepartment() {
+    inquirer
+    .prompt([
+      {
+          type: "input",
+          name: "name",
+          message: "which depearment do you want to add to this awesome company?",
+      },
+    ])
+    .then((action) => {
+        connection.query(
+            "INSERT INTO department SET ?",
+            (err, res) => {
+                if (err) throw err;
+                console.log(`${action.name}your department has been added.`);
+                initialiseQuestions();
+
+            }
+        );
+    });
+}
+
+function addRole() {
+inquirer
+.prompt([
+{
+   type: "input",
+   name: "title",
+   message: "What is the title of the role you want to add?",
+},
+{
+    type: "input",
+    name: "salary",
+    message: "How many zeroes are you adding to this role?", 
+},
+])
+.then((action) => {
+    connection.query(
+        "INSERT INTO role SET ?",
+        (err, res) => {
+            if (err) throw err;
+            console.log(`${action.title}your role has been added.`);
+            initialiseQuestions();
+
+        }
+    );
+});
 }
 /*
 function manageAll() {
