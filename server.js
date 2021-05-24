@@ -132,6 +132,68 @@ inquirer
     );
 });
 }
+function addEmployee() {
+    inquirer.
+    prompt([
+        {
+            type: "input",
+            name: "first name",
+            message: "What is your first name?",
+        },
+        {
+            type: "input",
+            name: "last name",
+            message: "what is your last name?", 
+        },
+        {
+            type: "input",
+            name: "roleId",
+            message: "what is the id number for the employee",
+        },
+        {
+            type: "input",
+            name: "managerID",
+            message: "what is the id number for the manager",
+        },
+
+        connection.query(
+            "INSERT INTO employee SET ?",
+            (err, res) => {
+                if (err) throw err;
+                console.log(`${action.title} yay your employee has been added.`);
+                initialiseQuestions();
+    
+            }
+        ),
+    ]);
+}
+
+function updateEmployee() {
+    inquirer.
+    prompt([
+        {
+        type: "input",
+        name: "employeeUpdate",
+        message: "which employee do you want to boost?",
+        },
+        {
+            type: "input",
+            name: "roleUpdate",
+            message: "which position do you want to boost them to?",
+        },
+        then((action) => {
+            connection.query(
+                "INSERT INTO updateEmployee SET ?",
+                (err, res) => {
+                    if (err) throw err;
+                    console.log(`${action.title}your employee has been boosted.`);
+                    initialiseQuestions();
+         
+                }
+                );
+            }),
+        ]);
+    };
 /*
 function manageAll() {
     const query = 'SELECT * FROM'
