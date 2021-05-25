@@ -8,13 +8,11 @@ const connection = mysql.createConnection({
   password: "donthackmebish25!",
   database: "employee_trackerDB",
 });
-
 connection.connect((err) => {
   if (err) throw err;
   console.log(`connected as id ${connection.threadId}`);
   initialiseQuestions();
 });
-
 function initialiseQuestions() {
   inquirer
     .prompt([
@@ -23,12 +21,12 @@ function initialiseQuestions() {
         type: "list",
         message: "Hiya!Welcome to our databse, what would you like to do?",
         choices: [
-          "view departments",
-          "view roles",
           "view employees",
+          "view roles",
+          "view departments",
           "add employee",
-          "add department",
           "add role",
+          "add department",
           "update employee role",
           "exit app",
         ],
@@ -58,7 +56,20 @@ function initialiseQuestions() {
       }
     });
 }
-
+function viewEmployees() {
+  connection.query("SELECT * FROM employee", (err, res) => {
+    if (err) throw err;
+    console.log(res);
+    initialiseQuestions();
+  });
+}
+function viewRoles() {
+  connection.query("SELECT * FROM role", (err, res) => {
+    if (err) throw err;
+    console.log(res);
+    initialiseQuestions();
+  });
+}
 function viewDepartments() {
   console.log("View dep called");
   connection.query("SELECT * FROM department", (err, res) => {
@@ -67,27 +78,6 @@ function viewDepartments() {
     initialiseQuestions();
   });
 }
-
-function viewRoles() {
-  connection.query("SELECT * FROM role", (err, res) => {
-    if (err) throw err;
-    console.log(res);
-    initialiseQuestions();
-  });
-}
-
-function viewEmployees() {
-  connection.query("SELECT * FROM employee", (err, res) => {
-    if (err) throw err;
-    console.log(res);
-    initialiseQuestions();
-  });
-}
-
-function exitApp() {
-  connection.end();
-}
-
 function addDepartment() {
   inquirer
     .prompt([
@@ -187,7 +177,6 @@ function addEmployee() {
     }
   );
 }
-
 function updateEmployee() {
   connection.query(
     "SELECT * FROM employee LEFT JOIN role ON employee.role_id = role.id",
@@ -229,26 +218,6 @@ function updateEmployee() {
     }
   );
 }
-
-function addManager() {
-  inquirer.prompt([
-    {
-      type: "input",
-      name: "id",
-      message: "what is your id number",
-    },
-    {
-      type: "input",
-      name: "yourname",
-      message: "what is your name?",
-    },
-  ]);
-  inquirer.prompt(questions).then((answers) => {
-    connection.query("INSERT INTO manager SET ?", answers, (err, res) => {
-      if (err) throw err;
-      console.log(`${answers.title} yay your manager has been added.`);
-
-      initialiseQuestions();
-    });
-  });
+function exitApp() {
+  connection.end();
 }
