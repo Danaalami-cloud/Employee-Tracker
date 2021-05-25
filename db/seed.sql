@@ -18,3 +18,8 @@ VALUES
     ('Ian', 'Isaacson', 2, 1), 
     ('Aaron', 'Aaaronson', 3, NULL),
     ('Isobol', 'Issy', 4, NULL)
+
+    INSERT INTO manager
+    (name, id)
+    VALUES
+    ('Scoobydoo', )

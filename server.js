@@ -35,7 +35,8 @@ function initialiseQuestions() {
       },
     ])
     .then((action) => {
-      switch (action.action) {
+      console.log('action', action)
+        switch (action.action) {
         case "view departments":
           return viewDepartments();
         case "view employees":
@@ -44,14 +45,16 @@ function initialiseQuestions() {
           return viewRoles();
         case "exit app":
           return exitApp();
-          case "add department":
+        case "add department":
           return addDepartment();
-          case "add role":
+        case "add role":
           return addRole();
-          case "add employee":
+        case "add employee":
           return addEmployee();
-          case "update employee role":
+        case "update employee role":
           return updateEmployee();
+          case "add manager id":
+          return addManager();
       }
     });
 }
@@ -85,152 +88,119 @@ function exitApp() {
 }
 
 function addDepartment() {
-    inquirer
+  inquirer
     .prompt([
       {
-          type: "input",
-          name: "name",
-          message: "which depearment do you want to add to this awesome company?",
+        type: "input",
+        name: "name",
+        message: "which depearment do you want to add to this awesome company?",
       },
     ])
-    .then((action) => {
-        connection.query(
-            "INSERT INTO department SET ?",
-            (err, res) => {
-                if (err) throw err;
-                console.log(`${action.name}your department has been added.`);
-                initialiseQuestions();
-
-            }
-        );
+    .then((answers) => {
+      connection.query("INSERT INTO department SET ?",answers,(err, res) => {
+        if (err) throw err;
+        console.log(`${answers.name}your department has been added.`);
+        initialiseQuestions();
+      });
     });
 }
 
 function addRole() {
-inquirer
-.prompt([
-{
-   type: "input",
-   name: "title",
-   message: "What is the title of the role you want to add?",
-},
-{
-    type: "input",
-    name: "salary",
-    message: "How many zeroes are you adding to this role?", 
-},
-])
-.then((action) => {
-    connection.query(
-        "INSERT INTO role SET ?",
-        (err, res) => {
-            if (err) throw err;
-            console.log(`${action.title}your role has been added.`);
-            initialiseQuestions();
-
-        }
-    );
-});
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "title",
+        message: "What is the title of the role you want to add?",
+      },
+      {
+        type: "input",
+        name: "salary",
+        message: "How many zeroes are you adding to this role?",
+      },
+    ])
+    .then((answers) => {
+      connection.query("INSERT INTO role SET ?", (err, res) => {
+        if (err) throw err;
+        console.log(`${action.title}your role has been added.`);
+        initialiseQuestions();
+      });
+    });
 }
 function addEmployee() {
-    inquirer.
-    prompt([
-        {
-            type: "input",
-            name: "first name",
-            message: "What is your first name?",
-        },
-        {
-            type: "input",
-            name: "last name",
-            message: "what is your last name?", 
-        },
-        {
-            type: "input",
-            name: "roleId",
-            message: "what is the id number for the employee",
-        },
-        {
-            type: "input",
-            name: "managerID",
-            message: "what is the id number for the manager",
-        },
+  const questions = [
+    {
+      type: "input",
+      name: "first_name",
+      message: "What is your first name?",
+    },
+    {
+      type: "input",
+      name: "last_name",
+      message: "what is your last name?",
+    },
+    {
+      type: "input",
+      name: "role_id",
+      message: "what is the id number for the employee",
+    },
+    {
+      type: "input",
+      name: "manager_id",
+      message: "what is the id number for the manager",
+    },
+  ];
+  inquirer.prompt(questions).then((answers) => {
+    connection.query("INSERT INTO employee SET ?", answers, (err, res) => {
+      if (err) throw err;
+      console.log(`${answers.name} yay your employee has been added.`);
 
-        connection.query(
-            "INSERT INTO employee SET ?",
-            (err, res) => {
-                if (err) throw err;
-                console.log(`${action.title} yay your employee has been added.`);
-                initialiseQuestions();
-    
-            }
-        ),
-    ]);
+      initialiseQuestions();
+    });
+  });
 }
 
 function updateEmployee() {
-    inquirer.
-    prompt([
-        {
-        type: "input",
-        name: "employeeUpdate",
-        message: "which employee do you want to boost?",
-        },
-        {
-            type: "input",
-            name: "roleUpdate",
-            message: "which position do you want to boost them to?",
-        },
-        then((action) => {
-            connection.query(
-                "INSERT INTO updateEmployee SET ?",
-                (err, res) => {
-                    if (err) throw err;
-                    console.log(`${action.title}your employee has been boosted.`);
-                    initialiseQuestions();
-         
-                }
-                );
-            }),
-        ]);
-    };
-/*
-function manageAll() {
-    const query = 'SELECT * FROM'
-    inquirer.prompt({
-        type:"input",
-        name: "All",
-        message: "what do you want to manage?",
-        choices: "role","departments", "employees";
-    })
+  inquirer.prompt([
+    {
+      type: "input",
+      name: "employeeUpdate",
+      message: "which employee do you want to boost?",
+    },
+    {
+      type: "input",
+      name: "roleUpdate",
+      message: "which position do you want to boost them to?",
+    },
+    then((action) => {
+      connection.query("INSERT INTO employee SET ?", (err, res) => {
+        if (err) throw err;
+        console.log(`${action.title}your employee has been boosted.`);
+        initialiseQuestions();
+      });
+    }),
+  ]);
 }
 
-function viewRoles(){
-    inquirer.prompt({
-        type:"input",
-        name: "roles",
-        message: "what role do you want to see?",
-}
-
-function viewEmployeess() {
-    inquirer.prompt({
-        type:"input",
-        name: "employees",
-        message: "what employees do you want to see?",
-}
-
-function deleteAll () {
-    inquirer.prompt({
-        type:"input";
-        name: "delete";
-        message: "whoud you like to delete all of your campnay's data?";
-}
-
-function updateEmployees() {
-
-}
-
-function exitApp() {
-
-}
-*/
+function addManager() {
+    inquirer.prompt([
+          {
+              type: "input",
+              name: "id",
+              message: "what is your id number",
+          },
+          {
+              type: "input",
+              name: "yourname",
+              message: "what is your name?",
+          },
+    ])
+    inquirer.prompt(questions).then((answers) => {
+        connection.query("INSERT INTO manager SET ?", answers, (err, res) => {
+          if (err) throw err;
+          console.log(`${answers.title} yay your manager has been added.`);
+    
+          initialiseQuestions();
+        });
+      });
+    }
