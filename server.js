@@ -60,6 +60,7 @@ function initialiseQuestions() {
 }
 
 function viewDepartments() {
+    console.log("View dep called")
   connection.query("SELECT * FROM department", (err, res) => {
     if (err) throw err;
     console.log(res);
@@ -104,60 +105,86 @@ function addDepartment() {
       });
     });
 }
-
 function addRole() {
-  inquirer
-    .prompt([
-      {
+    connection.query('SELECT * FROM department', (err, res) => {
+
+        inquirer
+        .prompt([
+            {
         type: "input",
         name: "title",
         message: "What is the title of the role you want to add?",
-      },
-      {
+    },
+    {
         type: "input",
         name: "salary",
         message: "How many zeroes are you adding to this role?",
-      },
-    ])
-    .then((answers) => {
-      connection.query("INSERT INTO role SET ?", (err, res) => {
+    },
+    {
+        name: 'department_id',
+        type: 'list',
+        choices() {
+        return res.map(({id, name}) => {
+            return {name: name, value: id}
+        });
+    },
+    message: "Please choose a department for this role"
+}
+])
+.then((answers) => {
+    connection.query("INSERT INTO role SET ?", answers, (err, res) => {
         if (err) throw err;
-        console.log(`${action.title}your role has been added.`);
+        console.log(`${answers.title}your role has been added.`);
         initialiseQuestions();
-      });
     });
+});
+})
 }
 function addEmployee() {
-  const questions = [
-    {
-      type: "input",
-      name: "first_name",
+    connection.query("SELECT * FROM employee LEFT JOIN role ON employee.role_id = role.id", (err, res) => {
+
+        const questions = [
+            {
+                type: "input",
+                name: "first_name",
       message: "What is your first name?",
     },
     {
-      type: "input",
-      name: "last_name",
-      message: "what is your last name?",
+        type: "input",
+        name: "last_name",
+        
+        message: "what is your last name?",
     },
     {
-      type: "input",
+      type: "list",
       name: "role_id",
-      message: "what is the id number for the employee",
+      choices() {
+        return res.map(({id, title}) => {
+            return {name: title, value: id}
+        });
+    },
+      message: "What is this employees role",
     },
     {
-      type: "input",
+      type: "list",
       name: "manager_id",
-      message: "what is the id number for the manager",
+      choices() {
+        return res.map(({id, first_name, last_name}) => {
+            return {name: first_name + last_name, value: id}
+        });
     },
-  ];
+      message: "Who is this employees manager",
+    },
+];
   inquirer.prompt(questions).then((answers) => {
-    connection.query("INSERT INTO employee SET ?", answers, (err, res) => {
-      if (err) throw err;
+      connection.query("INSERT INTO employee SET ?", answers, (err, res) => {
+          if (err) throw err;
       console.log(`${answers.name} yay your employee has been added.`);
-
+      
       initialiseQuestions();
     });
-  });
+});
+})
 }
 
 function updateEmployee() {
@@ -172,10 +199,10 @@ function updateEmployee() {
       name: "roleUpdate",
       message: "which position do you want to boost them to?",
     },
-    then((action) => {
+    then((answers) => {
       connection.query("INSERT INTO employee SET ?", (err, res) => {
         if (err) throw err;
-        console.log(`${action.title}your employee has been boosted.`);
+        console.log(`${answers.title}your employee has been boosted.`);
         initialiseQuestions();
       });
     }),
